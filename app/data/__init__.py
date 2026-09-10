@@ -1,0 +1,3 @@
+from .dossiers import VERIFIED_PROJECT_DOSSIERS
+
+__all__ = ["VERIFIED_PROJECT_DOSSIERS"]
