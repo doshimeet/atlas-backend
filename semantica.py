@@ -1,7 +1,7 @@
 import hashlib
 import time
 import urllib.parse
-from typing import List
+from typing import List, Any, Dict, Optional
 from models import (
     GraphData,
     GraphNode,
@@ -324,7 +324,14 @@ def compile_knowledge_graph(documents: List[WbgDocument] = VERIFIED_PROJECT_DOSS
 
     return GraphData(nodes=list(nodes_map.values()), edges=edges)
 
-def extract_semantica_triplets(text: str, doc_id: str = "PAD4829", country: str = "Kenya") -> ExtractionResponse:
+def extract_semantica_triplets(text: Any, doc_id: str = "PAD4829", country: str = "Kenya") -> ExtractionResponse:
+    if hasattr(text, "document_text"):
+        doc_id = getattr(text, "doc_id", None) or doc_id
+        country = getattr(text, "country", None) or country
+        text = text.document_text
+    elif not isinstance(text, str):
+        text = str(text)
+
     start_time = time.time()
     text_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
 
